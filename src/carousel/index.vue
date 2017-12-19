@@ -1,10 +1,14 @@
 <template>
-	<div>
-
+	<div class="carousel">
+		<slot></slot>
 	</div>
 </template>
 <script>
-	console.log( 3333333 );
+
 </script>
 <style scoped>
+	.carousel {
+		height: 100%;
+		width: 100%;
+	}
 </style>
