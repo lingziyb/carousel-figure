@@ -3,6 +3,7 @@ var webpack = require( 'webpack' )
 
 module.exports = {
 	entry: './src/main.js',
+
 	output: {
 		path: path.resolve( __dirname, './dist' ),
 		publicPath: '/dist/',
@@ -50,4 +51,7 @@ module.exports = {
 		open: true,
 	},
 	devtool: '#cheap-module-eval-source-map',
-}
+	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
+	],
+};
