@@ -3,9 +3,9 @@
 2、鼠标移入时  停止轮播
 -->
 <template>
-	<transition-group name="fade" class="carousel">
-		<div class="slide" v-for="(cover,index) in covers" v-bind:key="index" v-show="index==current">
-			<img :src="cover.img" alt="">
+	<transition-group name="fade" class="carousel" tag="div">
+		<div class="slide" v-for="(cover,index) in covers" :key="index" v-show="index==current">
+			<img :src="cover.img"/>
 			<!--<p>{{cover.info}}</p>-->
 		</div>
 	</transition-group>
@@ -30,52 +30,39 @@
 		},
 		methods: {
 			autoPlay(){
-				this.current++;
-				if ( this.current >= this.covers.length ) {
-					this.current = 0;
-				}
+				setTimeout( () => {
+					this.current++;
+					if ( this.current >= this.covers.length ) {
+						this.current = 0;
+					}
+				}, 10 )
 			},
 			play(){
-				setInterval( this.autoPlay, 2000 );
+				setInterval( this.autoPlay, 3000 );
 			}
 		}
 	};
 </script>
 <style rel="stylesheet/less" lang="less" scoped>
-	.fade-enter-active, .fade-leave-active {
-		transition: all 1s ease;
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: all .5s ease;
 	}
 
 	.fade-enter {
-		transform: translateX(100%);
-		-webkit-transform: translateX(100%);
-		-moz-transform: translateX(100%);
-		-ms-transform: translateX(100%);
-		opacity: 0;
+		transform: translateX(0);
 	}
 
 	.fade-enter-to {
-		transform: translateX(0);
-		-webkit-transform: translateX(0);
-		-moz-transform: translateX(0);
-		-ms-transform: translateX(0);
-		opacity: 1;
+		transform: translateX(-100%);
 	}
 
 	.fade-leave {
 		transform: translateX(0);
-		-webkit-transform: translateX(0);
-		-moz-transform: translateX(0);
-		-ms-transform: translateX(0);
-		opacity: 1;
 	}
 
 	.fade-leave-to {
 		transform: translateX(-100%);
-		-webkit-transform: translateX(-100%);
-		-moz-transform: translateX(-100%);
-		-ms-transform: translateX(-100%);
-		opacity: 0;
 	}
 
 	.carousel {
@@ -100,6 +87,32 @@
 			}
 		}
 	}
+
+	/*.carousel {*/
+	/*position: relative;*/
+	/*display: flex;*/
+	/*overflow: auto;*/
+
+	/*.slide {*/
+	/*height: 100%;*/
+	/*width: 100%;*/
+	/*position: absolute;*/
+	/*left: 0;*/
+	/*top: 0;*/
+
+	/*img {*/
+	/*height: 100%;*/
+	/*}*/
+	/*p {*/
+	/*position: absolute;*/
+	/*bottom: 0;*/
+	/*left: 0;*/
+	/*background-color: rgba(0, 0, 0, 0.2);*/
+	/*width: 100%;*/
+	/*color: darkblue;*/
+	/*}*/
+	/*}*/
+	/*}*/
 
 </style>
 
