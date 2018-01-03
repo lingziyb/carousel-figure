@@ -4,10 +4,12 @@
 -->
 <template>
 	<transition-group name="fade" class="carousel" tag="div">
-		<div class="slide" v-for="(cover,index) in covers" :key="index" v-show="index==current">
+		<div class="slide" v-for="(cover,index) in covers" :key="index" v-show="index==current"
+			 @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
 			<img :src="cover.img"/>
-			<!--<p>{{cover.info}}</p>-->
+			<p>{{cover.info}}</p>
 		</div>
+
 	</transition-group>
 </template>
 <script>
@@ -16,18 +18,35 @@
 		props: {
 			covers: Array,
 			speed: {
-				default: '1000'
+				default: '2000'
 			},
-			time: ''
+			time: '',
 		},
 		data(){
 			return {
 				current: 0,
+				swiperInter: null,
+				startX: 0,
+				endX: 0,
+				test: 9
 			};
 		},
 		created(){
 			this.play();
+
+
+			setTimeout( function () {
+				console.log( 3 )
+			}, 0 );
+			new Promise( function ( resolve ) {
+				console.log( 2 );
+				resolve()
+			} ).then( function () {
+				console.log( 4 );
+			} );
+			console.log( 1 );
 		},
+		computed: {},
 		methods: {
 			autoPlay(){
 				setTimeout( () => {
@@ -38,23 +57,53 @@
 				}, 10 )
 			},
 			play(){
-				setInterval( this.autoPlay, 3000 );
-			}
+				this.swiperInter = setInterval( this.autoPlay, this.speed );
+			},
+			touchStart( e ){
+				clearInterval( this.swiperInter );
+				this.startX = e.touches[ 0 ].clientX;
+				console.log( 'start', this.startX );
+			},
+			touchMove( e ){
+
+			},
+			touchEnd( e ){
+				this.play();
+				this.endX = e.changedTouches[ 0 ].clientX;
+				console.log( 'end', this.endX );
+
+				console.log( 'start-end', this.endX - this.startX );
+				if ( this.endX - this.startX < 0 ) {
+
+					// 从右往左滑
+					console.log( '从右往左滑，下一张' );
+					this.current++;
+				} else {
+
+					// 从左往右滑
+					console.log( '从左往右滑，上一张' );
+
+					this.current--;
+				}
+
+				this.startX = 0;
+				this.endX = 0;
+			},
 		}
 	};
 </script>
 <style rel="stylesheet/less" lang="less" scoped>
 	.fade-enter-active,
 	.fade-leave-active {
-		transition: all .5s ease;
+		transition: all 1s ease;
 	}
 
 	.fade-enter {
-		transform: translateX(0);
+		transform: translateX(100%);
 	}
 
 	.fade-enter-to {
-		transform: translateX(-100%);
+		transform: translateX(0);
 	}
 
 	.fade-leave {
@@ -65,14 +114,48 @@
 		transform: translateX(-100%);
 	}
 
+	/*.next-enter {*/
+	/*transform: translateX(100%);*/
+	/*}*/
+
+	/*.next-enter-to {*/
+	/*transform: translateX(0);*/
+	/*}*/
+
+	/*.next-leave {*/
+	/*transform: translateX(0);*/
+	/*}*/
+
+	/*.next-leave-to {*/
+	/*transform: translateX(-100%);*/
+	/*}*/
+
+	/*.last-enter {*/
+	/*transform: translateX(100%);*/
+	/*}*/
+
+	/*.last-enter-to {*/
+	/*transform: translateX(0);*/
+	/*}*/
+
+	/*.last-leave {*/
+	/*transform: translateX(0);*/
+	/*}*/
+
+	/*.last-leave-to {*/
+	/*transform: translateX(-100%);*/
+	/*}*/
+
 	.carousel {
+		position: relative;
 		display: flex;
-		overflow: auto;
 
 		.slide {
 			height: 100%;
 			width: 100%;
-			position: relative;
+			position: absolute;
+			left: 0;
+			top: 0;
 
 			img {
 				height: 100%;
@@ -87,33 +170,6 @@
 			}
 		}
 	}
-
-	/*.carousel {*/
-	/*position: relative;*/
-	/*display: flex;*/
-	/*overflow: auto;*/
-
-	/*.slide {*/
-	/*height: 100%;*/
-	/*width: 100%;*/
-	/*position: absolute;*/
-	/*left: 0;*/
-	/*top: 0;*/
-
-	/*img {*/
-	/*height: 100%;*/
-	/*}*/
-	/*p {*/
-	/*position: absolute;*/
-	/*bottom: 0;*/
-	/*left: 0;*/
-	/*background-color: rgba(0, 0, 0, 0.2);*/
-	/*width: 100%;*/
-	/*color: darkblue;*/
-	/*}*/
-	/*}*/
-	/*}*/
-
 </style>
 
 
