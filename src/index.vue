@@ -1,6 +1,11 @@
 <template>
 	<div id="test">
-		<carousel :covers="covers" class="banner"></carousel>
+		<carousel :covers="covers" class="banner" :total="covers.length">
+			<div class="slide" v-for="(cover,index) in covers" :key="index">
+				<img :src="cover.img"/>
+				<p>{{cover.info}}</p>
+			</div>
+		</carousel>
 	</div>
 </template>
 <script>
